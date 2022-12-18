@@ -116,18 +116,18 @@ void print_winner(void)
     }
 
     // print winner(s)
-    int winnersOutputted = 0;
+    // int winnersOutputted = 0;
     for (int i=0; i < candidate_count; i++)
     {
         int currentVoteCount = candidates[i].votes;
         if (currentVoteCount == highestNumberVotes)
         {
-            printf("%s", candidates[i].name);
-            winnersOutputted++;
-            if (winnersOutputted == 1 || winnersOutputted < winnerCount)
-            {
-                printf("\n");
-            }
+            printf("%s\n", candidates[i].name);
+            // winnersOutputted++;
+            // if (winnersOutputted == 1 || winnersOutputted < winnerCount)
+            // {
+            //     printf("\n");
+            // }
         }
     }
     return;
