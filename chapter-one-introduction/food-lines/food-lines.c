@@ -54,7 +54,7 @@ int main()
  //   solve(3,4, lines);
  //   return 0;
     int lines[MAX_LINES];
-    int n, m, i;
+    int n, m;
     scanf("%d%d", &n, &m);
     for (int i=0; i<n; i++)
     {
