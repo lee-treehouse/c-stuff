@@ -1,5 +1,5 @@
 // compile with `gcc food-lines.c` or `gcc -o outputFilename food-lines.c`
-
+#define MAX_LINES 100 
 #include <stdio.h>
 
 
@@ -33,25 +33,31 @@ int getShortestLineIndex(int lines[], int numberOfLines)
     return shortestIndex;
 }
 
+// we actually need to print the length of the line that gets joined
+// not the final lengths of all the lines
 void solve(int numberOfLines, int numberOfArrivals, int peopleInEachLine[])
 {
 
     for (int i=0; i<numberOfArrivals; i++)
     {
         int shortestLineIndex = getShortestLineIndex(peopleInEachLine, numberOfLines);
+        printf("%d\n", peopleInEachLine[shortestLineIndex]);
         peopleInEachLine[shortestLineIndex]++;
     }
-
-    for (int i=0; i < numberOfLines; i++)
-    {
-        printf("%d\n", peopleInEachLine[i]);
-    }
-
 }
 
 int main()
 {
-    int lines[3] = {3,2,5};
-    solve(3,4, lines);
+ //   int lines[3] = {3,2,5};
+ //   solve(3,4, lines);
+ //   return 0;
+    int lines[MAX_LINES];
+    int n, m, i;
+    scanf("%d%d", &n, &m);
+    for (int i=0; i<n; i++)
+    {
+        scanf("%d", &lines[i]);
+    }
+    solve(n, m, lines);
     return 0;
 }
