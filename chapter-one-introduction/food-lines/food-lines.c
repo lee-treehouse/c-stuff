@@ -1,4 +1,6 @@
 // compile with `gcc food-lines.c` or `gcc -o outputFilename food-lines.c`
+// pipe in food-lines.txt instead of command line params entry like this ./out < food-lines.txt
+// could also cat food-lines.txt | ./out
 #define MAX_LINES 100 
 #include <stdio.h>
 
