@@ -209,6 +209,7 @@ bool print_winner(void)
     int votesRequired =  (int)ceil(voter_count / 2);
 
     // exactly half the votes is not enough.. this is a bit hacky, revisit once tests are passing 
+    // maybe math.floor instead of math.ceil above and always add one (think it through first!)
     if ((votesRequired * 2) == voter_count)
     {
         votesRequired++;
