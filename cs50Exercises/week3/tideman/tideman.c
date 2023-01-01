@@ -16,6 +16,7 @@ typedef struct
 {
     int winner;
     int loser;
+    int margin;
 } pair;
 
 // Array of candidates
@@ -129,7 +130,31 @@ void record_preferences(int ranks[])
 // Record pairs of candidates where one is preferred over the other
 void add_pairs(void)
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = i + 1; j < candidate_count; j++)
+        {
+            int candidatePreferredCount = preferences[i][j];
+            int opponentPreferredCount = preferences[j][i];
+
+            // ok so first time the pair count is 0 right?
+            if (candidatePreferredCount > opponentPreferredCount)
+            {
+                pair a = {.winner = i, .loser = j, .margin = candidatePreferredCount - opponentPreferredCount};
+                pairs[pair_count] = a;
+                pair_count++;
+                // printf("Adding a pair - winner is %d and loser is %d and margin is %d pair count is %d \n", a.winner, a.loser, a.margin, pair_count);
+            }
+            if (candidatePreferredCount < opponentPreferredCount)
+            {
+                pair a = {.winner = j, .loser = i, .margin = opponentPreferredCount - candidatePreferredCount};
+                pairs[pair_count] = a;
+                pair_count++;
+                // printf("Adding a pair - winner is %d and loser is %d and margin is %d  and pair count is %d \n", a.winner, a.loser, a.margin, pair_count);
+            }
+        }
+    }
+
     return;
 }
 
