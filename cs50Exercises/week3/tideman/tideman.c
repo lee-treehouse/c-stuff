@@ -124,6 +124,19 @@ void record_preferences(int ranks[])
             // printf("incrementing preferences to say that this voter prefers %d to %d \n", candidate_index, opponent_index);
         }
     }
+
+    printf("\n final preferences state \n");
+    for (int i = 0; i < candidate_count; i++)
+    {
+        int candidate_index = ranks[i];
+        for (int j = i + 1; j < candidate_count; j++)
+        {
+            int opponent_index = ranks[j];
+            printf("preferences[%d][%d] = %d \n", i, j, preferences[candidate_index][opponent_index]);
+            // printf("incrementing preferences to say that this voter prefers %d to %d \n", candidate_index, opponent_index);
+        }
+    }
+
     return;
 }
 
@@ -158,10 +171,55 @@ void add_pairs(void)
     return;
 }
 
+// https://stackoverflow.com/questions/8721189/how-to-sort-an-array-of-structs-in-c
+int pairs_comparator(const void *v1, const void *v2)
+{
+    const pair *p1 = (pair *)v1;
+    const pair *p2 = (pair *)v2;
+    if (p1->margin < p2->margin)
+        return -1;
+    else if (p1->margin > p2->margin)
+        return +1;
+    else
+        return 0;
+}
+
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    // TODO
+
+    printf("\nPairs before sorting:\n");
+    for (int i = 0; i < pair_count; i++)
+    {
+        printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
+    }
+
+    for (int i = 0; i < pair_count - 1; i++)
+    {
+        // 1 and 2
+        // ie all up 0 and 1, 0 and 2
+        // 1 and 1, 1 and 2
+        for (int j = 1; j < pair_count; j++)
+        {
+            if (pairs[i].margin < pairs[j].margin)
+            {
+                // temp = pairs[i];
+                pair temp = {.winner = pairs[i].winner, .loser = pairs[i].loser, .margin = pairs[i].margin};
+                pairs[i] = pairs[j];
+                pairs[j] = temp;
+            }
+        }
+    }
+
+    printf("\nPairs after sorting:\n");
+    for (int i = 0; i < pair_count; i++)
+    {
+        printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
+    }
+
+    // TODO - return to this, as I believe the program description doesn't want you to sort manually
+    // ok guess I'll look at it right now, since though it compiles with gcc, check50 says fails to compile
+    // qsort(pairs, pair_count, sizeof(pair), pairs_comparator);
     return;
 }
 
