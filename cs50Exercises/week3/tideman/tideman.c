@@ -113,7 +113,16 @@ bool vote(int rank, string name, int ranks[])
 // Update preferences given one voter's ranks
 void record_preferences(int ranks[])
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        int candidate_index = ranks[i];
+        for (int j = i + 1; j < candidate_count; j++)
+        {
+            int opponent_index = ranks[j];
+            preferences[candidate_index][opponent_index]++;
+            // printf("incrementing preferences to say that this voter prefers %d to %d \n", candidate_index, opponent_index);
+        }
+    }
     return;
 }
 
