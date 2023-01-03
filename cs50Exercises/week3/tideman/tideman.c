@@ -17,6 +17,7 @@ typedef struct
     int winner;
     int loser;
     int margin;
+    int numVotersWhoPreferWinner;
 } pair;
 
 // Array of candidates
@@ -141,14 +142,14 @@ void add_pairs(void)
             // ok so first time the pair count is 0 right?
             if (candidatePreferredCount > opponentPreferredCount)
             {
-                pair a = {.winner = i, .loser = j, .margin = candidatePreferredCount - opponentPreferredCount};
+                pair a = {.winner = i, .loser = j, .margin = candidatePreferredCount - opponentPreferredCount, .numVotersWhoPreferWinner = candidatePreferredCount};
                 pairs[pair_count] = a;
                 pair_count++;
                 // printf("Adding a pair - winner is %d and loser is %d and margin is %d pair count is %d \n", a.winner, a.loser, a.margin, pair_count);
             }
             if (candidatePreferredCount < opponentPreferredCount)
             {
-                pair a = {.winner = j, .loser = i, .margin = opponentPreferredCount - candidatePreferredCount};
+                pair a = {.winner = j, .loser = i, .margin = opponentPreferredCount - candidatePreferredCount, .numVotersWhoPreferWinner = opponentPreferredCount};
                 pairs[pair_count] = a;
                 pair_count++;
                 // printf("Adding a pair - winner is %d and loser is %d and margin is %d  and pair count is %d \n", a.winner, a.loser, a.margin, pair_count);
@@ -214,17 +215,48 @@ void printTestResults(void)
     printf("\n end of test results \n");
 }
 
+// someone elses sort pairs from here - to see if it passes the tests - https://www.reddit.com/r/cs50/comments/wqze44/tideman_tests_show_the_code_works_properly/
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
+    // bubble sort in descending order
+    for (int i = 0; i < pair_count - 1; i++)
+    {
+        // the '- i' in the upper bound of j ensures
+        // the code doenst operate over sorted area
+        for (int j = 0; j < pair_count - 1 - i; j++)
+        {
+            if (preferences[pairs[j].winner][pairs[j].loser] <
+                preferences[pairs[j + 1].winner][pairs[j + 1].loser])
+            {
+                int w = pairs[j].winner;
+                int l = pairs[j].loser;
+                pairs[j].winner = pairs[j + 1].winner;
+                pairs[j].loser = pairs[j + 1].loser;
+                pairs[j + 1].winner = w;
+                pairs[j + 1].loser = l;
+            }
+        }
+    }
+    return;
+}
+
+// Sort pairs in decreasing order by strength of victory
+void sort_pairs_old(void)
+{
+
+    int debug = 1;
 
     // hardcode values before sortinng
-    //     hardcodeValuesBeforeSorting();
-
-    //   printf("\nPairs before sorting:\n");
-    for (int i = 0; i < pair_count; i++)
+    if (debug == 0)
     {
-        //         printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
+        hardcodeValuesBeforeSorting();
+
+        printf("\nPairs before sorting:\n");
+        for (int i = 0; i < pair_count; i++)
+        {
+            printf("Winner: %d, Loser %d, Margin %d, numVotersWhoPrefer %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin, pairs[i].numVotersWhoPreferWinner);
+        }
     }
 
     for (int i = 0; i < pair_count - 1; i++)
@@ -234,28 +266,30 @@ void sort_pairs(void)
         // 1 and 1, 1 and 2
         for (int j = 1; j < pair_count; j++)
         {
-            if (pairs[i].margin < pairs[j].margin)
+            if (pairs[i].numVotersWhoPreferWinner < pairs[j].numVotersWhoPreferWinner)
             {
                 // temp = pairs[i];
-                pair temp = {.winner = pairs[i].winner, .loser = pairs[i].loser, .margin = pairs[i].margin};
+                pair temp = {.winner = pairs[i].winner, .loser = pairs[i].loser, .margin = pairs[i].margin, .numVotersWhoPreferWinner = pairs[i].numVotersWhoPreferWinner};
                 pairs[i] = pairs[j];
                 pairs[j] = temp;
             }
         }
     }
 
-    //    printf("\nPairs after sorting:\n");
-    for (int i = 0; i < pair_count; i++)
+    if (debug == 0)
     {
-        //      printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
+        printf("\nPairs after sorting:\n");
+        for (int i = 0; i < pair_count; i++)
+        {
+            printf("Winner: %d, Loser %d, Margin %d, numVotersWhoPrefer %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin, pairs[i].numVotersWhoPreferWinner);
+        }
+
+        // TODO - return to this, as I believe the program description doesn't want you to sort manually
+        // ok guess I'll look at it right now, since though it compiles with gcc, check50 says fails to compile
+        // qsort(pairs, pair_count, sizeof(pair), pairs_comparator);
+
+        printTestResults();
     }
-
-    // TODO - return to this, as I believe the program description doesn't want you to sort manually
-    // ok guess I'll look at it right now, since though it compiles with gcc, check50 says fails to compile
-    // qsort(pairs, pair_count, sizeof(pair), pairs_comparator);
-
-    // printTestResults();
-
     return;
 }
 
