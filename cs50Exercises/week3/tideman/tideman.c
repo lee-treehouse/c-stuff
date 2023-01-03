@@ -125,18 +125,6 @@ void record_preferences(int ranks[])
         }
     }
 
-    printf("\n final preferences state \n");
-    for (int i = 0; i < candidate_count; i++)
-    {
-        int candidate_index = ranks[i];
-        for (int j = i + 1; j < candidate_count; j++)
-        {
-            int opponent_index = ranks[j];
-            printf("preferences[%d][%d] = %d \n", i, j, preferences[candidate_index][opponent_index]);
-            // printf("incrementing preferences to say that this voter prefers %d to %d \n", candidate_index, opponent_index);
-        }
-    }
-
     return;
 }
 
@@ -184,14 +172,59 @@ int pairs_comparator(const void *v1, const void *v2)
         return 0;
 }
 
+void hardcodeValuesBeforeSorting(void)
+{
+    preferences[0][0] = 0;
+    preferences[0][1] = 6;
+    preferences[0][2] = 7;
+
+    preferences[1][0] = 3;
+    preferences[1][1] = 0;
+    preferences[1][2] = 4;
+
+    preferences[2][0] = 2;
+    preferences[2][1] = 5;
+    preferences[2][2] = 0;
+
+    pairs[0].winner = 0;
+    pairs[0].loser = 1;
+
+    pairs[1].winner = 0;
+    pairs[1].loser = 2;
+
+    pairs[2].winner = 2;
+    pairs[2].loser = 1;
+
+    printf("\n final preferences state \n");
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = 0; j < candidate_count; j++)
+        {
+            printf("preferences[%d][%d] = %d \n", i, j, preferences[i][j]);
+            // printf("incrementing preferences to say that this voter prefers %d to %d \n", candidate_index, opponent_index);
+        }
+    }
+}
+
+void printTestResults(void)
+{
+    printf("test results \n");
+    for (int i = 0; i < 3; i++)
+        printf("%i %i ", pairs[i].winner, pairs[i].loser);
+    printf("\n end of test results \n");
+}
+
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
 
-    printf("\nPairs before sorting:\n");
+    // hardcode values before sortinng
+    //     hardcodeValuesBeforeSorting();
+
+    //   printf("\nPairs before sorting:\n");
     for (int i = 0; i < pair_count; i++)
     {
-        printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
+        //         printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
     }
 
     for (int i = 0; i < pair_count - 1; i++)
@@ -211,15 +244,18 @@ void sort_pairs(void)
         }
     }
 
-    printf("\nPairs after sorting:\n");
+    //    printf("\nPairs after sorting:\n");
     for (int i = 0; i < pair_count; i++)
     {
-        printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
+        //      printf("Winner: %d, Loser %d, Margin %d \n", pairs[i].winner, pairs[i].loser, pairs[i].margin);
     }
 
     // TODO - return to this, as I believe the program description doesn't want you to sort manually
     // ok guess I'll look at it right now, since though it compiles with gcc, check50 says fails to compile
     // qsort(pairs, pair_count, sizeof(pair), pairs_comparator);
+
+    // printTestResults();
+
     return;
 }
 
